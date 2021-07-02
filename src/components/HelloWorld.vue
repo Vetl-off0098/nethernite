@@ -28,6 +28,7 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
+    {{ posts }}
   </div>
 </template>
 
@@ -36,6 +37,19 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  computed: {
+    posts () {
+      return this.$store.getters.getPosts
+    }
+  },
+  mounted () {
+    this.fetchPosts()
+  },
+  methods: {
+    fetchPosts () {
+      this.$store.dispatch('fetchPosts')
+    }
   }
 }
 </script>
