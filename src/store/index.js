@@ -6,11 +6,15 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     popular: [],
+    info: {},
     posts: {}
   },
   mutations: {
     SET_POPULAR (state, popular) {
       state.popular = popular
+    },
+    SET_INFO (state, info) {
+      state.info = info
     },
     SET_POSTS (state, posts) {
       state.posts = posts
@@ -23,7 +27,16 @@ export default new Vuex.Store({
         response = await response.json()
         commit('SET_POPULAR', response)
       } catch (err) {
-        console.log(err)
+        console.error(err)
+      }
+    },
+    async fetchInfo ({ commit }, param) {
+      try {
+        let response = await fetch(`https://data.jsdelivr.com/v1/package/${param}`)
+        response = await response.json()
+        commit('SET_INFO', response)
+      } catch (err) {
+        console.error(err)
       }
     },
     async fetchPosts ({ commit }, param) {
@@ -32,7 +45,7 @@ export default new Vuex.Store({
         response = await response.json()
         commit('SET_POSTS', response)
       } catch (err) {
-        console.log(err)
+        console.error(err)
       }
     }
   },
