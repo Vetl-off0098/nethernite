@@ -13,7 +13,6 @@
             @keypress.enter="doSearch"
           />
 
-<!--          <button @click="doSearch">SEARCH</button>-->
           <v-btn
             class="mx-2"
             fab
@@ -44,7 +43,7 @@
             v-for="(vers, index) in arr"
             :key="index"
             :packageName="vers"
-            :name="name"
+            :packageType="name"
             :isVisible="true"
           />
         </div>
@@ -90,9 +89,12 @@ export default {
 
       this.name = this.search.toLowerCase()
       const validString = encodeURIComponent(this.name)
+
       await this.$store.dispatch('fetchPackage', validString)
       this.arr = this.$store.state.package.versions
-      // this.search = ''
+
+      this.search = ''
+      document.querySelector('input').blur()
     }
   }
 }

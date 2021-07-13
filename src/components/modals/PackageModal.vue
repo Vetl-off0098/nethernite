@@ -1,9 +1,11 @@
 <template>
-  <div class="modal">
-    <div class="info">
-      {{ info }}
+  <transition name="slide-fade" mode="out-in">
+    <div class="modal">
+      <div class="info">
+        {{ info }}
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>

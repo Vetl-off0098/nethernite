@@ -6,7 +6,7 @@
     >
       <v-card-text>
         <div class="text-h4 text--primary packageName">{{ packageName }}</div>
-        <p class="packageType">{{ name }}</p>
+        <p class="packageType">{{ packageType }}</p>
         <div class="text--primary packageHits">{{ packageHits }}</div>
       </v-card-text>
       <v-card-actions v-if="isVisible">
@@ -35,8 +35,7 @@ export default {
     packageName: String,
     packageType: String,
     packageHits: Number,
-    isVisible: Boolean,
-    name: String
+    isVisible: Boolean
   },
   components: {
     PackageModal
@@ -49,7 +48,7 @@ export default {
   },
   methods: {
     async fetchInfo () {
-      await this.$store.dispatch('fetchInfo', `${this.name}@${this.packageName}`)
+      await this.$store.dispatch('fetchInfo', `${this.packageType}@${this.packageName}`)
       this.packageInfo = this.$store.state.info
       this.modalIsOpen = true
     }
