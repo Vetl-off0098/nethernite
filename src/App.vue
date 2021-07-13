@@ -10,9 +10,22 @@
             outlined
             dense
             class="search__input"
+            @keypress.enter="doSearch"
           />
 
-          <button @click="doSearch">SEARCH</button>
+<!--          <button @click="doSearch">SEARCH</button>-->
+          <v-btn
+            class="mx-2"
+            fab
+            dark
+            large
+            color="cyan"
+            @click="doSearch"
+          >
+            <v-icon dark>
+              mdi-magnify
+            </v-icon>
+          </v-btn>
         </div>
 
         <div class="popular" v-if="arr.length === 0 && popular.length > 0">
@@ -22,11 +35,18 @@
             :packageName="card.name"
             :packageType="card.type"
             :packageHits="card.hits"
+            :isVisible="false"
           />
         </div>
 
-        <div class="posts" v-else-if="arr.length !== 0">
-          {{ arr }}
+        <div class="packageVersions" v-else-if="arr.length !== 0">
+          <PackageCard
+            v-for="(vers, index) in arr"
+            :key="index"
+            :packageName="vers"
+            :name="name"
+            :isVisible="true"
+          />
         </div>
 
         <div class="wait" v-else>Please wait...</div>
@@ -46,13 +66,11 @@ export default {
   data () {
     return {
       search: '',
-      arr: []
+      arr: [],
+      name: ''
     }
   },
   computed: {
-    posts () {
-      return this.$store.getters.getPosts
-    },
     popular () {
       return this.$store.getters.getPopular
     }
@@ -64,12 +82,17 @@ export default {
     fetchPopular () {
       this.$store.dispatch('fetchPopular')
     },
-    // fetchPosts () {
-    //   this.$store.dispatch('fetchPosts')
-    // },
     async doSearch () {
-      await this.$store.dispatch('fetchPosts', this.search)
-      this.arr = this.$store.state.posts
+      if (this.search.length === 0) {
+        this.arr = []
+        return
+      }
+
+      this.name = this.search.toLowerCase()
+      const validString = encodeURIComponent(this.name)
+      await this.$store.dispatch('fetchPackage', validString)
+      this.arr = this.$store.state.package.versions
+      // this.search = ''
     }
   }
 }
@@ -90,13 +113,13 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 25px auto 0;
+    margin: 25px auto;
     &__input {
       width: 100%;
     }
   }
-  .popular {
-    max-width: 90%;
+  .popular, .packageVersions {
+    max-width: 95%;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;

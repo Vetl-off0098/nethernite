@@ -6,10 +6,10 @@
     >
       <v-card-text>
         <div class="text-h4 text--primary packageName">{{ packageName }}</div>
-        <p class="packageType">{{ packageType }}</p>
+        <p class="packageType">{{ name }}</p>
         <div class="text--primary packageHits">{{ packageHits }}</div>
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions v-if="isVisible">
         <v-btn
           text
           color="deep-purple accent-4"
@@ -34,7 +34,9 @@ export default {
   props: {
     packageName: String,
     packageType: String,
-    packageHits: Number
+    packageHits: Number,
+    isVisible: Boolean,
+    name: String
   },
   components: {
     PackageModal
@@ -47,7 +49,7 @@ export default {
   },
   methods: {
     async fetchInfo () {
-      await this.$store.dispatch('fetchInfo', `${this.packageType}/${this.packageName}`)
+      await this.$store.dispatch('fetchInfo', `${this.name}@${this.packageName}`)
       this.packageInfo = this.$store.state.info
       this.modalIsOpen = true
     }
@@ -64,9 +66,9 @@ export default {
     justify-content: space-between;
     box-shadow: 15px 15px 70px rgba(61, 76, 106, 0.1) !important;
     border-radius: 12px !important;
-    & > .packageName {
-      color: #3D4C6A !important;
-      height: 80px;
-    }
+  }
+  .packageName {
+    color: #3D4C6A !important;
+    min-height: 80px;
   }
 </style>

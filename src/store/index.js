@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     popular: [],
     info: {},
-    posts: {}
+    package: {}
   },
   mutations: {
     SET_POPULAR (state, popular) {
@@ -16,8 +16,8 @@ export default new Vuex.Store({
     SET_INFO (state, info) {
       state.info = info
     },
-    SET_POSTS (state, posts) {
-      state.posts = posts
+    SET_PACKAGE (state, response) {
+      state.package = response
     }
   },
   actions: {
@@ -32,27 +32,24 @@ export default new Vuex.Store({
     },
     async fetchInfo ({ commit }, param) {
       try {
-        let response = await fetch(`https://data.jsdelivr.com/v1/package/${param}`)
+        let response = await fetch(`https://data.jsdelivr.com/v1/package/npm/${param}/stats`)
         response = await response.json()
         commit('SET_INFO', response)
       } catch (err) {
         console.error(err)
       }
     },
-    async fetchPosts ({ commit }, param) {
+    async fetchPackage ({ commit }, param) {
       try {
-        let response = await fetch(`https://jsonplaceholder.typicode.com/${param}`)
+        let response = await fetch(`https://data.jsdelivr.com/v1/package/npm/${param}`)
         response = await response.json()
-        commit('SET_POSTS', response)
+        commit('SET_PACKAGE', response)
       } catch (err) {
         console.error(err)
       }
     }
   },
   getters: {
-    getPosts: state => {
-      return state.posts
-    },
     getPopular: state => {
       return state.popular
     }
